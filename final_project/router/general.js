@@ -23,7 +23,8 @@ public_users.post("/register", (req,res) => {
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
   //Write your code here
-  return res.send(JSON.stringify(books, null, 4));
+  let book = {'books': books}
+  return res.send(JSON.stringify(book, null, 4));
 });
 
 // Get book details based on ISBN
@@ -53,9 +54,16 @@ public_users.get('/author/:author',function (req, res) {
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
   const title = req.params.title;
+//   let bookbytitle = {};
   for(const key in books)
-    if(books[key]["title"] === title)
-        return res.send(books[key]);
+    if(books[key]["title"] === title){
+        let bookbytitle = {
+            'isbn': key,
+            'title': books[key]['title'],
+            'reviews': books[key]['reviews']
+        }
+        return res.send(bookbytitle);
+    }
   return res.status(404).json({message: "Book not found!!"});
 });
 
